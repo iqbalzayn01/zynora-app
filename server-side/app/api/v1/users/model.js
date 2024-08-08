@@ -28,6 +28,12 @@ let userSchema = new mongoose.Schema(
       required: [true, 'Password is required'],
       minlength: 6,
     },
+    phone_number: {
+      type: String,
+      require: [true, 'Phone Number is require'],
+      unique: true,
+      maxlength: 15,
+    },
     avatar: {
       type: String,
       default: function () {
@@ -36,11 +42,10 @@ let userSchema = new mongoose.Schema(
         )}&background=random`;
       },
     },
-    role: {
+    bio: {
       type: String,
-      enum: ['user', 'useradmin'],
-      default: 'user',
-      required: [true, 'Role is required'],
+      default: 'My Bio',
+      maxlength: 400,
     },
   },
   {

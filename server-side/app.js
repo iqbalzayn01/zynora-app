@@ -9,9 +9,15 @@ const app = express();
 //
 
 // Router
+const v1 = '/api/v1';
+const authRouter = require('./app/api/v1/auth/router');
+const usersRouter = require('./app/api/v1/users/router');
+const followRouter = require('./app/api/v1/follow/router');
 //
 
 // Middlewares
+const notFoundMiddleware = require('./app/middlewares/not-found');
+const handleErrorMiddleware = require('./app/middlewares/handler-error');
 //
 
 app.use(logger('dev'));
@@ -27,9 +33,14 @@ app.get('/', (req, res) => {
 });
 
 // App Router
+app.use(`${v1}/cms`, authRouter);
+app.use(`${v1}/cms`, usersRouter);
+app.use(`${v1}/cms`, followRouter);
 //
 
 // App Middlewares
+app.use(notFoundMiddleware);
+app.use(handleErrorMiddleware);
 //
 
 module.exports = app;
