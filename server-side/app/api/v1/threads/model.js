@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
+const LikeThreads = require('../likeThreads/model');
 
 let threadsSchema = new mongoose.Schema(
   {
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Users',
       required: true,
     },
     content: {
@@ -16,15 +17,16 @@ let threadsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Media',
     },
-    hashTags: {
-      type: String,
-      maxlength: 50,
-    },
-    upVotesBy: {
-      type: Array,
-    },
+    hashTags: [
+      {
+        type: String,
+        maxlength: 50,
+      },
+    ],
+    likeThreads: [LikeThreads.schema],
     totalComments: {
-      type: Array,
+      type: Number,
+      default: 0,
     },
   },
   {

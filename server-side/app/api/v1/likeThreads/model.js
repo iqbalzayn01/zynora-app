@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-let upVotesSchema = new mongoose.Schema(
+let likeThreadsSchema = new mongoose.Schema(
   {
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Users',
       required: true,
     },
     threadID: {
@@ -12,7 +12,7 @@ let upVotesSchema = new mongoose.Schema(
       ref: 'Threads',
       required: true,
     },
-    voteType: {
+    likeType: {
       type: Number,
       default: 1,
     },
@@ -22,4 +22,4 @@ let upVotesSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('UpVotes', upVotesSchema);
+module.exports = mongoose.model('LikeThreads', likeThreadsSchema);

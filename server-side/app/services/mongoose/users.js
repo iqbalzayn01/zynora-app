@@ -65,6 +65,7 @@ const updateUsers = async (req) => {
     avatar,
     bio,
   });
+
   if (check)
     throw new BadRequestError(
       'Username already registered, please try another one'
