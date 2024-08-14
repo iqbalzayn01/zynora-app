@@ -1,4 +1,7 @@
-const { createLikeThreads } = require('../../../services/mongoose/likeThreads');
+const {
+  createLikeThreads,
+  deleteLikeThreads,
+} = require('../../../services/mongoose/likeThreads');
 const { StatusCodes } = require('http-status-codes');
 
 const create = async (req, res, next) => {
@@ -13,4 +16,16 @@ const create = async (req, res, next) => {
   }
 };
 
-module.exports = { create };
+const destroy = async (req, res, next) => {
+  try {
+    const result = await deleteLikeThreads(req);
+
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { create, destroy };

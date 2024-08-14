@@ -30,6 +30,22 @@ const createLikeThreads = async (req) => {
   return result;
 };
 
+const deleteLikeThreads = async (req) => {
+  const { id } = req.params;
+  const result = await LikeThreads.findOne({ _id: id });
+
+  if (!result) {
+    throw new NotFoundError(`No like thread found with id : ${id}`);
+  }
+
+  await result.deleteOne({ _id: id });
+
+  delete result._doc.password;
+
+  return result;
+};
+
 module.exports = {
   createLikeThreads,
+  deleteLikeThreads,
 };

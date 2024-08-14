@@ -3,18 +3,18 @@ const Follow = require('../../api/v1/follow/model');
 const { NotFoundError, BadRequestError } = require('../../errors');
 
 const getFollowersAndFollowing = async (req) => {
-  const userId = req.user.id;
-  const user = await Users.findById(userId).select('name username avatar');
+  const userID = req.user.id;
+  const user = await Users.findById(userID).select('name username avatar');
   if (!user) {
     throw new NotFoundError('User not found');
   }
 
-  const followers = await Follow.find({ following: userId }).populate(
+  const followers = await Follow.find({ following: userID }).populate(
     'follower',
     'name username avatar'
   );
 
-  const following = await Follow.find({ follower: userId }).populate(
+  const following = await Follow.find({ follower: userID }).populate(
     'following',
     'name username avatar'
   );

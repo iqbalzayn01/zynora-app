@@ -15,6 +15,7 @@ const usersRouter = require('./app/api/v1/users/router');
 const followRouter = require('./app/api/v1/follow/router');
 const threadsRouter = require('./app/api/v1/threads/router');
 const likeThreadsRouter = require('./app/api/v1/likeThreads/router');
+const commentsRouter = require('./app/api/v1/comments/router');
 //
 
 // Middlewares
@@ -40,6 +41,7 @@ app.use(`${v1}/cms`, usersRouter);
 app.use(`${v1}/cms`, followRouter);
 app.use(`${v1}/cms`, threadsRouter);
 app.use(`${v1}/cms`, likeThreadsRouter);
+app.use(`${v1}/cms`, commentsRouter);
 //
 
 // App Middlewares

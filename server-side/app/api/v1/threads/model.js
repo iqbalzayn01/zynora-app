@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const LikeThreads = require('../likeThreads/model');
 
 let threadsSchema = new mongoose.Schema(
   {
@@ -23,7 +22,6 @@ let threadsSchema = new mongoose.Schema(
         maxlength: 50,
       },
     ],
-    likeThreads: [LikeThreads.schema],
     totalComments: {
       type: Number,
       default: 0,

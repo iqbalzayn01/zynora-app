@@ -1,10 +1,10 @@
 const Threads = require('../../api/v1/threads/model');
+const Comments = require('../../api/v1/comments/model');
 const { BadRequestError, NotFoundError } = require('../../errors');
 const { checkingUsers } = require('./users');
 
 const createThreads = async (req) => {
-  const { userID, content, mediaID, hashTags, likeThreads, totalComments } =
-    req.body;
+  const { userID, content, mediaID, hashTags, totalComments } = req.body;
 
   await checkingUsers(userID);
 
@@ -17,7 +17,6 @@ const createThreads = async (req) => {
     content,
     mediaID,
     hashTags,
-    likeThreads,
     totalComments,
   });
 
@@ -33,14 +32,28 @@ const getAllThreads = async (req) => {
 const getOneThreads = async (req) => {
   const { id } = req.params;
 
-  const result = await Threads.findOne({ _id: id }).populate({
+  const threads = await Threads.findOne({ _id: id }).populate({
     path: 'userID',
     select: '_id name username email avatar',
   });
 
-  if (!result) {
+  if (!threads) {
     throw new NotFoundError(`No thread found with id : ${id}`);
   }
+
+  const comments = await Comments.find({ threadID: id }).populate({
+    path: 'userID',
+    select: '_id name username avatar',
+  });
+
+  if (!comments) {
+    throw new NotFoundError(`Comments not found`);
+  }
+
+  const result = {
+    threads,
+    comments,
+  };
 
   return result;
 };
@@ -72,8 +85,6 @@ const deleteThreads = async (req) => {
   }
 
   await result.deleteOne({ _id: id });
-
-  delete result._doc.password;
 
   return result;
 };

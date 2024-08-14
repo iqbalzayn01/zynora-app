@@ -2,6 +2,7 @@ const {
   createThreads,
   getAllThreads,
   getOneThreads,
+  deleteThreads,
 } = require('../../../services/mongoose/threads');
 const { StatusCodes } = require('http-status-codes');
 
@@ -41,8 +42,21 @@ const find = async (req, res, next) => {
   }
 };
 
+const destroy = async (req, res, next) => {
+  try {
+    const result = await deleteThreads(req);
+
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   create,
   index,
   find,
+  destroy,
 };
