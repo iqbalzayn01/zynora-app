@@ -6,10 +6,12 @@ let likeCommentsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users',
       required: true,
+      unique: true,
     },
     commentID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comments',
+      required: true,
     },
     likeType: {
       type: Number,

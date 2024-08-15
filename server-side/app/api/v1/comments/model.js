@@ -16,7 +16,6 @@ let commentsSchema = new mongoose.Schema({
     type: String,
     require: [true, 'Content is required'],
   },
-  likeComments: [mongoose.Schema.Types.ObjectId],
 });
 
 commentsSchema.post('save', async function () {

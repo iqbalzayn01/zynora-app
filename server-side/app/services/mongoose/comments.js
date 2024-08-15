@@ -5,10 +5,9 @@ const { checkingUsers } = require('./users');
 
 const createComments = async (req) => {
   const { id } = req.params;
-  const { userID, threadID, content, likeComments } = req.body;
+  const { userID, content } = req.body;
 
-  if (threadID !== id)
-    throw new BadRequestError('Thread ID does not match the URL parameter ID');
+  const threadID = id;
 
   await checkingUsers(userID);
   await checkingThreads(threadID);
@@ -20,7 +19,6 @@ const createComments = async (req) => {
     userID,
     threadID,
     content,
-    likeComments,
   });
 
   return result;
@@ -64,9 +62,18 @@ const deleteComments = async (req) => {
   return result;
 };
 
+const checkingComments = async (id) => {
+  const result = await Comments.findOne({ _id: id });
+
+  if (!result) throw new NotFoundError(`No thread found with id : ${id}`);
+
+  return result;
+};
+
 module.exports = {
   createComments,
   getAllComments,
   updateComments,
   deleteComments,
+  checkingComments,
 };

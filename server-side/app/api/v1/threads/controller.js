@@ -23,7 +23,9 @@ const index = async (req, res, next) => {
     const result = await getAllThreads(req);
 
     res.status(StatusCodes.OK).json({
-      data: result,
+      data: {
+        threads: result,
+      },
     });
   } catch (error) {
     next(error);
@@ -35,7 +37,9 @@ const find = async (req, res, next) => {
     const result = await getOneThreads(req);
 
     res.status(StatusCodes.OK).json({
-      data: result,
+      data: {
+        detailThread: result,
+      },
     });
   } catch (error) {
     next(error);

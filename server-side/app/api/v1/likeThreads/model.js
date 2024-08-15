@@ -12,7 +12,6 @@ let likeThreadsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Threads',
       required: true,
-      unique: true,
     },
     likeType: {
       type: Number,
