@@ -190,7 +190,6 @@ const updateThreads = async (req) => {
 
 const deleteThreads = async (req) => {
   const { id } = req.params;
-
   const result = await Threads.findOne({
     _id: id,
   });

@@ -6,14 +6,8 @@ const { checkingThreads } = require('./threads');
 
 const createLikeThreads = async (req) => {
   const { id } = req.params;
-  const { userID, threadID, likeType } = req.body;
-  const dataThreads = await Threads.findOne({
-    _id: id,
-  });
-
-  if (!dataThreads) {
-    throw new NotFoundError(`No like thread found with id : ${id}`);
-  }
+  const { userID, likeType } = req.body;
+  const threadID = id;
 
   await checkingUsers(userID);
   await checkingThreads(threadID);
@@ -40,8 +34,6 @@ const deleteLikeThreads = async (req) => {
   }
 
   await result.deleteOne({ _id: id });
-
-  delete result._doc.password;
 
   return result;
 };
