@@ -4,7 +4,8 @@ const { BadRequestError, NotFoundError } = require('../../errors');
 const { checkingUsers } = require('./users');
 
 const createThreads = async (req) => {
-  const { userID, content, mediaID, hashTags, totalComments } = req.body;
+  const userID = req.user.id;
+  const { content, mediaID, hashTags, totalComments } = req.body;
 
   await checkingUsers(userID);
 

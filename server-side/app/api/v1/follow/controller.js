@@ -11,7 +11,9 @@ const index = async (req, res, next) => {
     const result = await getFollowersAndFollowing(req);
 
     res.status(StatusCodes.OK).json({
-      data: result,
+      data: {
+        follow: result,
+      },
     });
   } catch (error) {
     next(error);

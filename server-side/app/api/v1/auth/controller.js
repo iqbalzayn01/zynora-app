@@ -18,7 +18,9 @@ const userLogged = async (req, res, next) => {
     const result = await getUserLogged(req);
 
     res.status(StatusCodes.OK).json({
-      data: result,
+      data: {
+        userLogged: result,
+      },
     });
   } catch (error) {
     next(error);
