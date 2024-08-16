@@ -25,7 +25,43 @@ const createComments = async (req) => {
 };
 
 const getAllComments = async (req) => {
-  const result = await Comments.find({});
+  const result = await Comments.aggregate([
+    {
+      $lookup: {
+        from: 'likecomments',
+        let: { comment_id: '$_id' },
+        pipeline: [
+          { $match: { $expr: { $eq: ['$commentID', '$$comment_id'] } } },
+          { $count: 'totalLikesComments' },
+        ],
+        as: 'likeComments',
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'userID',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    {
+      $unwind: '$user',
+    },
+    {
+      $project: {
+        _id: 1,
+        content: 1,
+        likeComments: {
+          $arrayElemAt: ['$likeComments.totalLikesComments', 0],
+        },
+        'user._id': 1,
+        'user.name': 1,
+        'user.username': 1,
+        'user.avatar': 1,
+      },
+    },
+  ]);
 
   return result;
 };
