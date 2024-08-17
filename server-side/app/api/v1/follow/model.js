@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const followSchema = new mongoose.Schema(
   {
-    following: {
+    follower: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users',
       required: true,
     },
-    follower: {
+    following: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Users',
       required: true,
