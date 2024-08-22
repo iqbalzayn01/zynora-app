@@ -1,5 +1,5 @@
 const Users = require('../../api/v1/users/model');
-const { auth } = require('../../firebase.config');
+const { auth, admin } = require('../../firebase.config');
 const { signInWithEmailAndPassword } = require('firebase/auth');
 const { BadRequestError, UnauthorizedError } = require('../../errors');
 
@@ -41,50 +41,21 @@ const login = async (req) => {
 };
 
 const getUserLogged = async (req) => {
-  const { idToken } = req.body;
-  console.log(idToken);
+  const { id } = req.params;
+  const firebaseUID = req.user.uid;
 
-  if (!idToken) {
-    throw new UnauthorizedError('No token provided');
+  if (firebaseUID !== id) {
+    throw new UnauthorizedError('Authentication invalid.');
   }
 
-  let decodedToken;
-  try {
-    decodedToken = await admin.auth().verifyIdToken(idToken);
-  } catch (error) {
-    throw new UnauthorizedError('Invalid token');
-  }
-
-  const firebaseUID = decodedToken.uid;
-
-  const user = await Users.findOne({ firebaseUID });
-
-  if (!user) {
+  // Find the user in the database
+  const result = await Users.findOne({ firebaseUID });
+  if (!result) {
     throw new UnauthorizedError('User not found');
   }
 
-  return {
-    _id: user._id,
-    firebaseUID: user.firebaseUID,
-    email: user.email,
-    name: user.name,
-    username: user.username,
-    avatar: user.avatar,
-    bio: user.bio,
-  };
+  // Return user information
+  return result;
 };
-
-// const getUserLogged = async (req) => {
-//   const { id } = req.params;
-//   const result = await Users.findById(id);
-
-//   console.log(id);
-
-//   if (!result) {
-//     throw new UnauthorizedError('User not found');
-//   }
-
-//   return result;
-// };
 
 module.exports = { login, getUserLogged };

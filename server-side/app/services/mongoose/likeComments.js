@@ -5,18 +5,20 @@ const { checkingComments } = require('./comments');
 
 const createLikeComments = async (req) => {
   const { id } = req.params;
-  const { userID, likeType } = req.body;
+  const firebaseUID = req.user.uid;
+  const { likeType } = req.body;
+
   const commentID = id;
 
-  await checkingUsers(userID);
+  await checkingUsers(firebaseUID);
   await checkingComments(commentID);
 
-  if (!userID || !commentID) {
-    throw new BadRequestError('userID & commentID are required');
+  if (!firebaseUID || !commentID) {
+    throw new BadRequestError('firebaseUID & commentID are required');
   }
 
   const result = await LikeComments.create({
-    userID,
+    firebaseUID,
     commentID,
     likeType,
   });

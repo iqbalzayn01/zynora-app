@@ -5,6 +5,6 @@ const { authenticateUser } = require('../../../middlewares/auth');
 
 router.post('/follow', authenticateUser, handleFollow);
 router.post('/unfollow', authenticateUser, handleUnFollow);
-router.get('/:id/followers-following', authenticateUser, index);
+router.get('/follow/:id', authenticateUser, index);
 
 module.exports = router;

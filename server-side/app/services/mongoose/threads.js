@@ -4,17 +4,17 @@ const { BadRequestError, NotFoundError } = require('../../errors');
 const { checkingUsers } = require('./users');
 
 const createThreads = async (req) => {
-  const userID = req.user.id;
+  const firebaseUID = req.user.uid;
   const { content, mediaID, hashTags, totalComments } = req.body;
 
-  await checkingUsers(userID);
+  await checkingUsers(firebaseUID);
 
-  if (!content || !userID) {
-    throw new BadRequestError('Content & userID are required');
+  if (!content || !firebaseUID) {
+    throw new BadRequestError('Content & firebaseUID are required');
   }
 
   const result = await Threads.create({
-    userID,
+    firebaseUID,
     content,
     mediaID,
     hashTags,
@@ -40,8 +40,8 @@ const getAllThreads = async (req) => {
     {
       $lookup: {
         from: 'users',
-        localField: 'userID',
-        foreignField: '_id',
+        localField: 'firebaseUID',
+        foreignField: 'firebaseUID',
         as: 'user',
       },
     },
@@ -55,7 +55,7 @@ const getAllThreads = async (req) => {
         mediaID: 1,
         hashTags: 1,
         totalComments: 1,
-        'user._id': 1,
+        'user.firebaseUID': 1,
         // 'user.name': 1,
         'user.username': 1,
         'user.avatar': 1,
@@ -98,8 +98,8 @@ const getOneThreads = async (req) => {
     {
       $lookup: {
         from: 'users',
-        foreignField: '_id',
-        localField: 'userID',
+        foreignField: 'firebaseUID',
+        localField: 'firebaseUID',
         as: 'user',
       },
     },
@@ -109,8 +109,8 @@ const getOneThreads = async (req) => {
     {
       $lookup: {
         from: 'users',
-        localField: 'comments.userID',
-        foreignField: '_id',
+        localField: 'comments.firebaseUID',
+        foreignField: 'firebaseUID',
         as: 'commentUsers',
       },
     },
@@ -124,7 +124,7 @@ const getOneThreads = async (req) => {
               _id: '$$comment._id',
               content: '$$comment.content',
               likeComments: '$$comment.likeComments',
-              userID: {
+              firebaseUID: {
                 $let: {
                   vars: {
                     user: {
@@ -133,7 +133,12 @@ const getOneThreads = async (req) => {
                           $filter: {
                             input: '$commentUsers',
                             as: 'user',
-                            cond: { $eq: ['$$user._id', '$$comment.userID'] },
+                            cond: {
+                              $eq: [
+                                '$$user.firebaseUID',
+                                '$$comment.firebaseUID',
+                              ],
+                            },
                           },
                         },
                         0,
@@ -141,7 +146,7 @@ const getOneThreads = async (req) => {
                     },
                   },
                   in: {
-                    _id: '$$user._id',
+                    _id: '$$user.firebaseUID',
                     name: '$$user.name',
                     username: '$$user.username',
                     avatar: '$$user.avatar',
@@ -159,7 +164,7 @@ const getOneThreads = async (req) => {
         content: 1,
         hashTags: 1,
         mediaID: 1,
-        user: { _id: 1, name: 1, username: 1, avatar: 1 },
+        user: { firebaseUID: 1, name: 1, username: 1, avatar: 1 },
         comments: 1,
         totalComments: { $size: '$comments' },
         likeThreads: { $arrayElemAt: ['$likeThreads.totalLikes', 0] },

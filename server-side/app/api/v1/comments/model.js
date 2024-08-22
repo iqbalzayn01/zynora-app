@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const Threads = require('../threads/model');
 
 let commentsSchema = new mongoose.Schema({
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
+  firebaseUID: {
+    type: String,
     ref: 'Users',
-    require: [true, 'userID is required'],
+    require: [true, 'firebaseUID is required'],
   },
   threadID: {
     type: mongoose.Schema.Types.ObjectId,

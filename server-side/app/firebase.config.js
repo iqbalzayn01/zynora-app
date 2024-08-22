@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const admin = require('firebase-admin');
-const credentials = require('../serviceAccountKey.json');
+const credentials = require('../credentials.json');
 const { initializeApp } = require('firebase/app');
 const { getStorage } = require('firebase/storage');
 const { getAuth } = require('firebase/auth');

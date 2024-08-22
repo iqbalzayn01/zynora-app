@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 let threadsSchema = new mongoose.Schema(
   {
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
+    firebaseUID: {
+      type: String,
       ref: 'Users',
       required: true,
     },

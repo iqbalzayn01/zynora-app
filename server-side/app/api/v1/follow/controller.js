@@ -25,7 +25,9 @@ const handleFollow = async (req, res, next) => {
     const result = await followUser(req);
 
     res.status(StatusCodes.CREATED).json({
-      data: result,
+      data: {
+        follow: result,
+      },
     });
   } catch (error) {
     next(error);
@@ -37,7 +39,9 @@ const handleUnFollow = async (req, res, next) => {
     const result = await unFollowUser(req);
 
     res.status(StatusCodes.OK).json({
-      data: result,
+      data: {
+        unfollow: result,
+      },
     });
   } catch (error) {
     next(error);

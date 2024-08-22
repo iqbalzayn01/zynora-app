@@ -1,23 +1,23 @@
 const LikeThreads = require('../../api/v1/likeThreads/model');
-const Threads = require('../../api/v1/threads/model');
 const { BadRequestError, NotFoundError } = require('../../errors');
 const { checkingUsers } = require('./users');
 const { checkingThreads } = require('./threads');
 
 const createLikeThreads = async (req) => {
   const { id } = req.params;
-  const { userID, likeType } = req.body;
+  const firebaseUID = req.user.uid;
+  const { likeType } = req.body;
   const threadID = id;
 
-  await checkingUsers(userID);
+  await checkingUsers(firebaseUID);
   await checkingThreads(threadID);
 
-  if (!userID || !threadID) {
-    throw new BadRequestError('userID & threadID are required');
+  if (!firebaseUID || !threadID) {
+    throw new BadRequestError('firebaseUID & threadID are required');
   }
 
   const result = await LikeThreads.create({
-    userID,
+    firebaseUID,
     threadID,
     likeType,
   });

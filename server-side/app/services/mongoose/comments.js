@@ -5,18 +5,21 @@ const { checkingUsers } = require('./users');
 
 const createComments = async (req) => {
   const { id } = req.params;
-  const { userID, content } = req.body;
+  const firebaseUID = req.user.uid;
+  const { content } = req.body;
 
   const threadID = id;
 
-  await checkingUsers(userID);
+  console.log('testing threadID:', threadID);
+
+  await checkingUsers(firebaseUID);
   await checkingThreads(threadID);
 
-  if (!content || !userID || !threadID)
-    throw new BadRequestError('Content, userID, & threadID are required.');
+  if (!content || !firebaseUID || !threadID)
+    throw new BadRequestError('Content, firebaseUID, & threadID are required.');
 
   const result = await Comments.create({
-    userID,
+    firebaseUID,
     threadID,
     content,
   });
@@ -40,8 +43,8 @@ const getAllComments = async (req) => {
     {
       $lookup: {
         from: 'users',
-        localField: 'userID',
-        foreignField: '_id',
+        localField: 'firebaseUID',
+        foreignField: 'firebaseUID',
         as: 'user',
       },
     },
@@ -55,7 +58,7 @@ const getAllComments = async (req) => {
         likeComments: {
           $arrayElemAt: ['$likeComments.totalLikesComments', 0],
         },
-        'user._id': 1,
+        'user.firebaseUID': 1,
         'user.name': 1,
         'user.username': 1,
         'user.avatar': 1,
@@ -101,7 +104,7 @@ const deleteComments = async (req) => {
 const checkingComments = async (id) => {
   const result = await Comments.findOne({ _id: id });
 
-  if (!result) throw new NotFoundError(`No thread found with id : ${id}`);
+  if (!result) throw new NotFoundError(`No comments found with id : ${id}`);
 
   return result;
 };

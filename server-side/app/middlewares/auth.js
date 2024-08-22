@@ -4,20 +4,21 @@ const { admin } = require('../firebase.config');
 const authenticateUser = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    let token;
-
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      token = authHeader.split(' ')[1];
+    if (!authHeader || !authHeader.startsWith('Bearer')) {
+      throw new UnauthorizedError('No token provided');
     }
 
-    if (!token) {
-      throw new UnauthenticatedError('Authentication invalid');
+    const idToken = authHeader.split(' ')[1];
+
+    if (!idToken) {
+      throw new UnauthenticatedError('Authentication invalid.');
     }
 
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    // Verify the ID token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
 
     req.user = {
-      id: decodedToken.uid,
+      uid: decodedToken.uid,
       email: decodedToken.email,
       name: decodedToken.name || '',
     };
@@ -25,7 +26,7 @@ const authenticateUser = async (req, res, next) => {
     next();
   } catch (err) {
     console.error('ERROR', err.msg);
-    next(new UnauthenticatedError('Authentication invalid'));
+    next(new UnauthenticatedError('Authentication invalid.'));
   }
 };
 
