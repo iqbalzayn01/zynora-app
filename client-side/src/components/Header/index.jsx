@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import CNavLinks from '../CNavLinks';
 
-export default function Header() {
+export default function Header({ className }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 px-5 py-[30px]">
+    <div className={`grid grid-cols-2 md:grid-cols-3 px-5 py-5 ${className}`}>
       <div className="flex items-center justify-start">
         <Link to="/">
           <img
@@ -28,3 +29,7 @@ export default function Header() {
     </div>
   );
 }
+
+Header.propTypes = {
+  className: PropTypes.string,
+};
