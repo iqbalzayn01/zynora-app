@@ -5,11 +5,13 @@ import {
 } from 'react-router-dom';
 
 import Onboarding from '../pages/Onboarding';
+import Threads from '../pages/Threads';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<Onboarding />} />
+      <Route path="/login/*" element={<Onboarding />} />
+      <Route path="/*" element={<Threads />} />
     </>
   )
 );
