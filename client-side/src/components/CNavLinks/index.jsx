@@ -36,19 +36,21 @@ export default function CNavLinks() {
   ];
 
   return (
-    <div className="flex gap-12 md:gap-14">
+    <div className="flex gap-4 md:gap-1">
       {links.map((link) => {
         const isActive = location.pathname === link.to;
         return (
           <Link
             key={link.name}
             to={link.to}
-            className={`w-8 h-8 text-white ${isActive ? 'font-bold' : ''}`}
+            className={`flex items-center justify-center hover:bg-[rgba(255,255,255,0.04)] hover:backdrop-blur-3xl w-16 md:w-20 h-16 md:h-20 rounded-lg ${
+              isActive ? 'font-bold' : ''
+            }`}
           >
             <img
               src={isActive && link.linkActive ? link.linkActive : link.src}
               alt={link.name}
-              className={`object-cover transition-opacity duration-300 ease-in-out ${
+              className={`object-cover w-8 h-8 ${
                 isActive ? 'opacity-100' : 'opacity-30'
               }`}
             />

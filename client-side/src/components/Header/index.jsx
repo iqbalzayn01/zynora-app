@@ -5,7 +5,9 @@ import CNavLinks from '../CNavLinks';
 
 export default function Header({ className }) {
   return (
-    <div className={`grid grid-cols-2 md:grid-cols-3 px-5 py-5 ${className}`}>
+    <div
+      className={`grid grid-cols-2 md:grid-cols-3 px-5 py-[10px] ${className}`}
+    >
       <div className="flex items-center justify-start">
         <Link to="/">
           <img
