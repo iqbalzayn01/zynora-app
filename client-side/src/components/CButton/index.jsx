@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types';
 
-export default function CButton({ children, onClick, className, disable }) {
+export default function CButton({
+  children,
+  onClick,
+  className,
+  disable,
+  type,
+}) {
   return (
     <button
-      className={`button ${className}`}
+      type={type}
       onClick={onClick}
+      className={`button ${className}`}
       disabled={disable}
     >
       {children}
@@ -13,8 +20,9 @@ export default function CButton({ children, onClick, className, disable }) {
 }
 
 CButton.propTypes = {
-  children: PropTypes.node.isRequired,
+  type: PropTypes.string,
   onClick: PropTypes.func,
   className: PropTypes.string,
   disable: PropTypes.bool,
+  children: PropTypes.node.isRequired,
 };
