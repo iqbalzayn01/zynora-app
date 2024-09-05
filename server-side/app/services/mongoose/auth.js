@@ -41,12 +41,7 @@ const login = async (req) => {
 };
 
 const getUserLogged = async (req) => {
-  const { id } = req.params;
   const firebaseUID = req.user.uid;
-
-  if (firebaseUID !== id) {
-    throw new UnauthorizedError('Authentication invalid.');
-  }
 
   // Find the user in the database
   const result = await Users.findOne({ firebaseUID });

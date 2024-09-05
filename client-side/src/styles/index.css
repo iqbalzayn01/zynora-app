@@ -21,7 +21,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: url('../../public/design/logo-zynora-subtract.svg');
+        background-image: url('/design/logo-zynora-subtract.svg');
         background-position: center;
         background-size: 800px;
         background-repeat: no-repeat;
@@ -32,5 +32,10 @@
 @layer utilities {
     .transition-base {
         @apply transition-all duration-300 ease-in-out
+    }
+
+    .content-editable-div:empty::before {
+        content: 'Start a thread...';
+        @apply text-thirdcolor
     }
 }

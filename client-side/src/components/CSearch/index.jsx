@@ -22,7 +22,7 @@ export default function CSearch({
         // value={}
         // onChange={}
         placeholder={placeholder}
-        className="w-full bg-transparent text-black dark:text-white border-0 outline-none"
+        className="w-full bg-transparent text-white placeholder:text-thirdcolor border-0 outline-none"
       />
     </div>
   );

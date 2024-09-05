@@ -1,9 +1,28 @@
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from 'firebase/auth';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
+import { auth } from '../../config';
+import { clearToken } from '../../redux/auth/action';
 import CNavLinks from '../CNavLinks';
+import CButton from '../CButton';
 
-export default function Header({ className }) {
+export default function Header({ className, handle }) {
+  const { idToken } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      dispatch(clearToken());
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logout:', error);
+    }
+  };
+
   return (
     <div
       className={`grid grid-cols-2 md:grid-cols-3 px-5 py-[10px] ${className}`}
@@ -18,15 +37,25 @@ export default function Header({ className }) {
         </Link>
       </div>
       <div className="hidden md:flex items-center justify-center">
-        <CNavLinks />
+        <CNavLinks onNewThreadPostClick={handle} />
       </div>
       <div className="flex items-center justify-end">
-        <Link
-          to="/login"
-          className="flex items-center justify-center w-[84px] bg-primary-gradient text-white px-5 py-2 rounded-lg"
-        >
-          Login
-        </Link>
+        {idToken ? (
+          <CButton
+            type="button"
+            onClick={handleSignOut}
+            className="hover:bg-thirdcolor text-thirdcolor hover:text-white opacity-50 hover:opacity-75 border-2 border-thirdcolor p-1 rounded-lg"
+          >
+            Sign out
+          </CButton>
+        ) : (
+          <Link
+            to="/login"
+            className="bg-primary-gradient text-white px-5 py-2 rounded-lg"
+          >
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -34,4 +63,5 @@ export default function Header({ className }) {
 
 Header.propTypes = {
   className: PropTypes.string,
+  handle: PropTypes.func,
 };

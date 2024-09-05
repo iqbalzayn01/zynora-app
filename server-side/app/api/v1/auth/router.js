@@ -5,6 +5,6 @@ const { authenticateUser } = require('../../../middlewares/auth');
 
 router.post('/auth/login', loginCms);
 router.post('/auth/signup', signUp);
-router.get('/users/me/:id', authenticateUser, userLogged);
+router.get('/users/me', authenticateUser, userLogged);
 
 module.exports = router;

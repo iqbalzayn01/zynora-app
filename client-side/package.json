@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+    "firebase": "^10.13.1",
     "framer-motion": "^11.3.28",
     "html-react-parser": "^5.1.12",
     "prop-types": "^15.8.1",
